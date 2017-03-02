@@ -1,10 +1,12 @@
 var rows = 24;
 var cols = 24;
 
+var playing = false;
+
 // initialize
 function initialize() {
     createTable();
-    
+    setUpControlButtons();
 }
 
 // lay out the grid
@@ -50,6 +52,44 @@ function cellClickHandler(eventObj) {
         cell.class = "dead"; // cell.setAttribute("class", "dead") works
     }
     */
+}
+
+// set up contol buttons
+function setUpControlButtons() {
+    // button to start
+    var startButton = document.getElementById("start");
+    startButton.onclick = startButtonHandler;
+    
+    // butto to clear
+    var clearButton = document.getElementById("clear");
+    clearButton.onclick = clearButtonHandler;
+}
+
+// start button handler
+function startButtonHandler() {
+    if(playing) {
+        console.log("Pause the game");
+        playing = false;
+        this.innerHTML = "continue";
+    } else {
+        console.log("Continue the game");
+        playing = true;
+        this.innerHTML = "pause";
+        play();
+    }
+}
+
+// clear button handler
+function clearButtonHandler() {
+    console.log("Clear the game: stop playing, clear the grid");
+    playing = false;
+    var startButton = document.getElementById("start");
+    startButton.innerHTML = "start";
+}
+
+// run the game of life
+function play() {
+    console.log("Play the game");
 }
 
 // start everything
