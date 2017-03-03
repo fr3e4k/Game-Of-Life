@@ -1,6 +1,8 @@
 var rows = 24;
 var cols = 24;
 var playing = false;
+var timer;
+var reproductionTime = 100;
 
 var grid = new Array(rows);
 var nextGrid = new Array(rows);
@@ -22,6 +24,17 @@ function resetGrids() {
         }
     }
 }
+
+// copy the nextGrid to grid and reset grid
+function copyAndResetGrid() {
+    for(var i = 0; i < rows; i++){
+        for(var j = 0; j < cols; j++) {
+            grid[i][j] = nextGrid[i][j];
+            nextGrid[i][j] = 0;
+        }
+    }
+}
+
 
 // initialize
 function initialize() {
@@ -82,6 +95,20 @@ function cellClickHandler(eventObj) {
     */
 }
 
+// update the view
+function updateView() {
+    for(var i =0; i < rows; i++){
+        for(var j = 0; j < cols; j++){
+            var cell = document.getElementById(i + "_" + j);
+            if(grid[i][j] == 0) {
+                cell.setAttribute("class", "dead");
+            } else {
+                cell.setAttribute("class", "live");
+            }
+        }
+    }
+}
+
 // set up contol buttons
 function setUpControlButtons() {
     // button to start
@@ -99,6 +126,7 @@ function startButtonHandler() {
         console.log("Pause the game");
         playing = false;
         this.innerHTML = "continue";
+        clearTimeout(timer);
     } else {
         console.log("Continue the game");
         playing = true;
@@ -119,6 +147,10 @@ function clearButtonHandler() {
 function play() {
     console.log("Play the game");
     computeNextGen();
+    
+    if(playing){
+        timer = setTimeout(play, reproductionTime);
+    }
 }
 
 // compute the next generation
@@ -128,6 +160,11 @@ function computeNextGen() {
             applyRules(i, j);
         }
     }
+    
+    // copy nextGrid to grid, and reset nextGrid
+    copyAndResetGrid();
+    // copy all 1 values to "live" in the table
+    updateView();
 }
 
 
