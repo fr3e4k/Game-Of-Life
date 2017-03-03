@@ -214,6 +214,7 @@ function countNeighbors(row, col) {
             count++
         }
     }
+    console.log(count);
     return count;
     
 }
