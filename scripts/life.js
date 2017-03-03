@@ -34,7 +34,7 @@ function initialize() {
 // lay out the grid
 function createTable() {
     var gridContainer = document.getElementById("gridContainer");
-    if(!gridContainer) {
+    if( !gridContainer ) {
         // throw error
         console.error("Problem: no div for the grid table!");
     }
@@ -118,6 +118,105 @@ function clearButtonHandler() {
 // run the game of life
 function play() {
     console.log("Play the game");
+    computeNextGen();
+}
+
+// compute the next generation
+function computeNextGen() {
+    for(var i = 0; i < rows; i++){
+        for(j = 0; j < cols; j++) {
+            applyRules(i, j);
+        }
+    }
+}
+
+
+// RULES
+// Any live cell with fewer than two live neighbours dies, as if caused by under-population.
+// Any live cell with two or three live neighbours lives on to the next generation.
+// Any live cell with more than three live neighbours dies, as if by overcrowding.
+// Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+
+// apply the rules of the game
+function applyRules(row, col) {
+    var numNeighbors = countNeighbors(row, col);
+    if( grid[row][col] == 1) {
+        if( numNeighbors < 2 ) {
+            nextGrid[row][col] = 0;
+        } else if (numNeighbors == 2 || numNeighbors == 3) {
+            nextGrid[row][col] = 1;
+        } else if( numNeighbors > 3 ) {
+            nextGrid[row][col] = 0;
+        }
+    } else if(grid[row][col] == 0) {
+        if( numNeighbors == 3 ){
+            nextGrid[row][col] = 1;
+        }
+    }
+}
+
+// count the neighbors around a particular cell location
+function countNeighbors(row, col) {
+    var count = 0;
+    // check if an upper row exists
+    if(row-1 >= 0) {
+        // neighbor directly on top
+        if( grid[row-1][col] == 1){
+            count++;
+        }
+    }
+    // check if an upper row with left column exists
+    if( row-1 >= 0 && col-1 >= 0 ) {
+        // neighbor on top left side
+        if( grid[row-1][col-1] == 1) {
+            count++;
+        }
+    }
+    // check if an upper row with right column exists
+    if(row-1 >= 0 && col+1 < cols) {
+        // neighbor on top right
+        if( grid[row-1][col+1] == 1 ) {
+            count++;
+        }
+    }
+    // check if left column exists
+    if(col-1 >= 0){
+        // neighbor on immediate left
+        if(grid[row][col-1] == 1){
+            count++;
+        }
+    }
+    // check if right column exists
+    if(col+1 < cols) {
+        // neighor on immediate right
+        if(grid[row][col+1] == 1) {
+            count++;
+        }
+    }
+    // check if a bottom row exists
+    if(row+1 < rows){
+        // neighbor directly below
+        if(grid[row+1][col] == 1) {
+            count++;
+        }
+    }
+    // check if a bottom row with left column exists
+    if(row+1 < rows && col-1 >= 0) {
+        // neighbor on bottom left side
+        if(grid[row+1][col-1] == 1){
+            count++;
+        }
+    }
+    // check if a bottom row with right column exists
+    if(row+1 < rows && col+1 < cols) {
+        // neighbor on bottom right side
+        if(grid[row+1][col+1] == 1){
+            count++
+        }
+    }
+    console.log(count);
+    return count;
+    
 }
 
 // start everything
