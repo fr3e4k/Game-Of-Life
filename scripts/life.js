@@ -1,5 +1,5 @@
-var rows = 72;
-var cols = 72;
+var rows = 24;
+var cols = 96;
 var playing = false;
 var timer;
 var reproductionTime = 100;
