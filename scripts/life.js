@@ -1,5 +1,5 @@
-var rows = 24;
-var cols = 24;
+var rows = 72;
+var cols = 72;
 var playing = false;
 var timer;
 var reproductionTime = 100;
@@ -115,9 +115,13 @@ function setUpControlButtons() {
     var startButton = document.getElementById("start");
     startButton.onclick = startButtonHandler;
     
-    // butto to clear
+    // button to clear
     var clearButton = document.getElementById("clear");
     clearButton.onclick = clearButtonHandler;
+    
+    // button to generate random cells
+    var randomButton = document.getElementById("random");
+    randomButton.onclick = randomButtonHandler;
 }
 
 // start button handler
@@ -161,6 +165,24 @@ function clearButtonHandler() {
     resetGrids();
     updateView();
     */
+}
+
+// random button handler
+function randomButtonHandler() {
+    if(playing) {
+        return;
+    }
+    clearButtonHandler();
+    for(var i = 0; i < rows; i++){
+        for(var j = 0; j < cols; j++){
+            var isLive = Math.round(Math.random());
+            if(isLive == 1){
+                var cell = document.getElementById(i + "_" + j);
+                cell.setAttribute("class", "live");
+                grid[i][j] = 1;
+            }
+        }
+    }
 }
 
 // run the game of life
